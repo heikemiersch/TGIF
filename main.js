@@ -36,6 +36,10 @@ for (var r = 0; r < rows; r++) {
         "</td>"
     "</tr>";
 }
+
+// do i not have to insert this somewhere to make names links?
+// <li> < a href = "members[r].contact_form" > name </a></li >
+
 // console.log(table);
 // console.log(tbody);
 tbody.innerHTML = table;
