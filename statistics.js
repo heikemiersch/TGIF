@@ -1,6 +1,6 @@
 var members = data.results[0].members;
 
-// ↓ this is the first table on senate-attendance page ↓
+// ↓ creating the glance table for senate-attendance and house-attendance ↓
 
 var tbody = document.getElementById("tbody1")
 
@@ -16,35 +16,44 @@ var statistics = {
     totalVotedWithParty: 0
 }
 
-for (var r = 0; r < members.length; r++) {
-    if (members[r].party === "D") {
-        statistics.numberOfDemocrats++;
-        statistics.democratsVotedWithParty +=
-            members[r].votes_with_party_pct;
-    } else if (members[r].party === "R") {
-        statistics.numberOfRepublicans++;
-        statistics.republicansVotedWithParty +=
-            members[r].votes_with_party_pct;
-    } else if (members[r].party === "I") {
-        statistics.numberOfIndependents++;
-        statistics.independentsVotedWithParty +=
-            members[r].votes_with_party_pct;
+function createGlanceTable() {
+    for (var r = 0; r < members.length; r++) {
+        if (members[r].party === "D") {
+            statistics.numberOfDemocrats++;
+            if (typeof members[r].votes_with_party_pct !== "undefined") {
+                statistics.democratsVotedWithParty +=
+                    members[r].votes_with_party_pct;
+            }
+            // console.log(statistics.democratsVotedWithParty)
+
+        } else if (members[r].party === "R") {
+            statistics.numberOfRepublicans++;
+            if (typeof members[r].votes_with_party_pct !== "undefined") {
+                statistics.republicansVotedWithParty +=
+                    members[r].votes_with_party_pct;
+            }
+
+        } else if (members[r].party === "I") {
+            statistics.numberOfIndependents++;
+            if (typeof members[r].votes_with_party_pct !== "undefined") {
+                statistics.independentsVotedWithParty +=
+                    members[r].votes_with_party_pct;
+            }
+        }
     }
-}
+    statistics.totalVotedWithParty = (statistics.democratsVotedWithParty + statistics.republicansVotedWithParty + statistics.independentsVotedWithParty) / members.length;
 
+    statistics.democratsVotedWithParty = statistics.democratsVotedWithParty / statistics.numberOfDemocrats;
+    statistics.republicansVotedWithParty = statistics.republicansVotedWithParty / statistics.numberOfRepublicans;
+    statistics.independentsVotedWithParty = statistics.independentsVotedWithParty / statistics.numberOfIndependents;
+    statistics.total = members.length;
 
-statistics.democratsVotedWithParty = statistics.democratsVotedWithParty / statistics.numberOfDemocrats;
-statistics.democratsVotedWithParty = (Math.floor(statistics.democratsVotedWithParty * 100) / 100);
-
-statistics.republicansVotedWithParty = statistics.republicansVotedWithParty / statistics.numberOfRepublicans;
-statistics.republicansVotedWithParty = (Math.floor(statistics.republicansVotedWithParty * 100) / 100);
-
-statistics.independentsVotedWithParty = statistics.independentsVotedWithParty / statistics.numberOfIndependents;
-statistics.independentsVotedWithParty = (Math.floor(statistics.republicansVotedWithParty * 100) / 100);
-
-statistics.total = (statistics.numberOfDemocrats + statistics.numberOfRepublicans + statistics.numberOfIndependents);
-statistics.totalVotedWithParty = (statistics.democratsVotedWithParty + statistics.republicansVotedWithParty + statistics.independentsVotedWithParty) / 3;
-
+    statistics.democratsVotedWithParty = (Math.floor(statistics.democratsVotedWithParty * 100) / 100);
+    statistics.republicansVotedWithParty = (Math.floor(statistics.republicansVotedWithParty * 100) / 100);
+    statistics.independentsVotedWithParty = (Math.floor(statistics.republicansVotedWithParty * 100) / 100);
+    statistics.totalVotedWithParty = (Math.floor(statistics.totalVotedWithParty * 100) / 100);
+};
+createGlanceTable();
 
 tbody.innerHTML +=
     "<tr>" +
@@ -100,13 +109,14 @@ var table3 = "";
 const arrEng = [];
 
 for (r = 0; r < members.length; r++) {
-    if (members[r].missed_votes != null) {
+    if (members[r].missed_votes != null && members[r].votes_with_party_pct !== "undefined") {
         arrEng.push({
             missedVotes: members[r].missed_votes,
             name: (members[r].first_name + " ") +
                 (members[r].middle_name || "") +
                 (" " + members[r].last_name),
             missedVotesPercentage: members[r].missed_votes_pct
+
         })
     }
 };
