@@ -1,6 +1,5 @@
 var members = data.results[0].members;
 
-
 // ↓ this is the first table on senate-attendance page ↓
 
 var tbody = document.getElementById("tbody1")
@@ -12,44 +11,40 @@ var statistics = {
     total: 0,
 
     democratsVotedWithParty: 0,
-    republicansVotedWithParty: 0
+    republicansVotedWithParty: 0,
+    independentsVotedWithParty: 0,
+    totalVotedWithParty: 0
 }
 
 for (var r = 0; r < members.length; r++) {
     if (members[r].party === "D") {
         statistics.numberOfDemocrats++;
+        statistics.democratsVotedWithParty +=
+            members[r].votes_with_party_pct;
     } else if (members[r].party === "R") {
         statistics.numberOfRepublicans++;
+        statistics.republicansVotedWithParty +=
+            members[r].votes_with_party_pct;
     } else if (members[r].party === "I") {
         statistics.numberOfIndependents++;
+        statistics.independentsVotedWithParty +=
+            members[r].votes_with_party_pct;
     }
 }
 
-// ↓ the following two loops could have gone into the previous one, i know that now ↓
-
-for (var r = 0; r < members.length; r++) {
-    if (members[r].party === "D") {
-        statistics.democratsVotedWithParty +=
-            members[r].votes_with_party_pct
-    }
-}
 
 statistics.democratsVotedWithParty = statistics.democratsVotedWithParty / statistics.numberOfDemocrats;
-
 statistics.democratsVotedWithParty = (Math.floor(statistics.democratsVotedWithParty * 100) / 100);
 
-for (var r = 0; r < members.length; r++) {
-    if (members[r].party === "R") {
-        statistics.republicansVotedWithParty +=
-            members[r].votes_with_party_pct
-    }
-}
-
 statistics.republicansVotedWithParty = statistics.republicansVotedWithParty / statistics.numberOfRepublicans;
-
 statistics.republicansVotedWithParty = (Math.floor(statistics.republicansVotedWithParty * 100) / 100);
 
+statistics.independentsVotedWithParty = statistics.independentsVotedWithParty / statistics.numberOfIndependents;
+statistics.independentsVotedWithParty = (Math.floor(statistics.republicansVotedWithParty * 100) / 100);
+
 statistics.total = (statistics.numberOfDemocrats + statistics.numberOfRepublicans + statistics.numberOfIndependents);
+statistics.totalVotedWithParty = (statistics.democratsVotedWithParty + statistics.republicansVotedWithParty + statistics.independentsVotedWithParty) / 3;
+
 
 tbody.innerHTML +=
     "<tr>" +
@@ -82,6 +77,7 @@ tbody.innerHTML +=
     statistics.numberOfIndependents +
     "</td>" +
     "<td>" +
+    statistics.independentsVotedWithParty +
     "</td>" +
     "</tr>" +
     "<tr>" +
@@ -91,27 +87,29 @@ tbody.innerHTML +=
     "<td>" +
     statistics.total +
     "</td>" +
+    "<td>" +
+    statistics.totalVotedWithParty +
+    "</td>" +
     "</tr>";
 
 // ↓ this is the second table on the senate-attendance page ↓
 
 var members = data.results[0].members;
-var tablo = "";
-
+var table3 = "";
 
 const arrEng = [];
 
 for (r = 0; r < members.length; r++) {
-    arrEng.push({
-        missedVotes: members[r].missed_votes,
-        name: (members[r].first_name + " ") +
-            (members[r].middle_name || "") +
-            (" " + members[r].last_name),
-        missedVotesPercentage: members[r].missed_votes_pct
-    })
+    if (members[r].missed_votes != null) {
+        arrEng.push({
+            missedVotes: members[r].missed_votes,
+            name: (members[r].first_name + " ") +
+                (members[r].middle_name || "") +
+                (" " + members[r].last_name),
+            missedVotesPercentage: members[r].missed_votes_pct
+        })
+    }
 };
-
-
 
 
 // ↓ this sorts arrEng into ascending order 
@@ -129,11 +127,10 @@ for (var r = 0; r < arrEng.length; r++) {
     }
 };
 
-
 for (var r = 0; r < arrEngLeast.length; r++) {
 
-    var leastTable = document.getElementById("least")
-    tablo +=
+    var leastTable = document.getElementById("leastEngaged")
+    table3 +=
         "<tr>" +
         "<td>" +
         arrEngLeast[r].name +
@@ -147,11 +144,9 @@ for (var r = 0; r < arrEngLeast.length; r++) {
         "</tr>";
 }
 
-
-// console.log(tablo);
+// console.log(table3);
 // console.log(tbody);
-leastTable.innerHTML = tablo;
-
+leastTable.innerHTML = table3;
 
 // this would be the approach to create the tables in nodejs, so without strings
 
@@ -164,13 +159,11 @@ leastTable.innerHTML = tablo;
 // console.log(rows2)
 // tbody.appendChild(rows2)
 
-
 // ↓ this is the third table on the senate-attendance page ↓
 arrEng.sort((a, b) => (a.missedVotesPercentage > b.missedVotesPercentage ? 1 : -1));
 
-
 var members = data.results[0].members;
-var tabla = "";
+var table2 = "";
 var rows = members.length;
 var arrEngMost = []
 
@@ -185,9 +178,9 @@ for (var r = 0; r < arrEng.length; r++) {
 
 console.log(arrEngMost.length)
 for (var r = 0; r < arrEngMost.length; r++) {
-    var tableMost = document.getElementById("most");
+    var tableMost = document.getElementById("mostEngaged");
 
-    tabla +=
+    table2 +=
         "<tr>" +
         "<td>" +
         arrEngMost[r].name +
@@ -202,15 +195,10 @@ for (var r = 0; r < arrEngMost.length; r++) {
         "</tr>";
 
 }
-console.log(tabla)
-
+console.log(table2)
 
 // console.log(tbody);
-tableMost.innerHTML = tabla;
-
-
-
-
+tableMost.innerHTML = table2;
 
 // ↓ this was my attempt to sort out the 10% ↓
 
@@ -237,3 +225,6 @@ tableMost.innerHTML = tabla;
 // 222 push result of loop (the max number than was found) into var highestTen
 // 225 call function
 // 227 console.log it to check
+
+
+// var tbody = document.getElementById("mostLoyal")
