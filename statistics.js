@@ -115,7 +115,11 @@ var table3 = "";
 
 const arrEng = [];
 
-function createAttendTable() {
+if (document.title == "Senate Attendance" || document.title == "House Attendance") {
+    createAttendanceList();
+}
+
+function createAttendanceList() {
     for (r = 0; r < members.length; r++) {
         if (members[r].missed_votes != null && members[r].votes_with_party_pct !== "undefined") {
             arrEng.push({
@@ -131,77 +135,76 @@ function createAttendTable() {
     arrEng.sort((a, b) => (a.missedVotesPercentage < b.missedVotesPercentage ? 1 : -1));
     // ↓ this seems to be the easiest and shortest way  to do that ↓
     // list.sort((a, b) => (a.color > b.color) ? 1 : -1)
+    var arrEngLeast = [];
+    for (var r = 0; r < arrEng.length; r++) {
+        if (arrEngLeast.length < (arrEng.length * 0.1)) {
+            arrEngLeast.push(arrEng[r]);
+        }
+    };
+    createEngLeastTable(arrEngLeast);
+
+    // ↓ this is the third table on the senate-attendance page ↓
+    arrEng.sort((a, b) => (a.missedVotesPercentage > b.missedVotesPercentage ? 1 : -1));
+
+    // ↓ and here we have the most engaged 10 % ↓
+    var arrEngMost = [];
+    for (var r = 0; r < arrEng.length; r++) {
+        if (arrEngMost.length < (arrEng.length * 0.1)) {
+            arrEngMost.push(arrEng[r]);
+        }
+    };
+
+    createEngMostTable(arrEngMost);
 }
-createAttendTable();
 
-// ↓ and here we have the least engaged 10% ↓
-
-var arrEngLeast = []
-for (var r = 0; r < arrEng.length; r++) {
-    if (arrEngLeast.length < (arrEng.length * 0.1)) {
-        arrEngLeast.push(arrEng[r]);
-    }
-};
 
 // ↓ this creates the actual table ↓
 
-for (var r = 0; r < arrEngLeast.length; r++) {
-
+function createEngLeastTable(arr) {
     var leastTable = document.getElementById("leastEngaged")
-    table3 +=
-        "<tr>" +
-        "<td>" +
-        arrEngLeast[r].name +
-        "</td>" +
-        "<td>" +
-        arrEngLeast[r].missedVotes +
-        "</td>" +
-        "<td>" +
-        arrEngLeast[r].missedVotesPercentage +
-        "</td>" +
-        "</tr>";
-}
-leastTable.innerHTML = table3;
-
-// ↓ this is the third table on the senate-attendance page ↓
-arrEng.sort((a, b) => (a.missedVotesPercentage > b.missedVotesPercentage ? 1 : -1));
-
-var members = data.results[0].members;
-var table2 = "";
-var rows = members.length;
-var arrEngMost = []
-
-// ↓ and here we have the most engaged 10 % ↓
-
-var arrEngMost = [];
-for (var r = 0; r < arrEng.length; r++) {
-    if (arrEngMost.length < (arrEng.length * 0.1)) {
-        arrEngMost.push(arrEng[r]);
+    for (var r = 0; r < arr.length; r++) {
+        table3 +=
+            "<tr>" +
+            "<td>" +
+            arr[r].name +
+            "</td>" +
+            "<td>" +
+            arr[r].missedVotes +
+            "</td>" +
+            "<td>" +
+            arr[r].missedVotesPercentage +
+            "</td>" +
+            "</tr>";
     }
-};
-console.log(arrEngMost.length)
+    leastTable.innerHTML = table3;
 
-for (var r = 0; r < arrEngMost.length; r++) {
-    var tableMost = document.getElementById("mostEngaged");
-
-    table2 +=
-        "<tr>" +
-        "<td>" +
-        arrEngMost[r].name +
-        "</td>" +
-        "<td>" +
-        arrEngMost[r].missedVotes +
-        "</td>" +
-        "<td>" +
-        arrEngMost[r].missedVotesPercentage +
-        "</td>" +
-        "</tr>";
 }
-console.log(table2)
 
-// console.log(tbody);
-tableMost.innerHTML = table2;
+// var rows = members.length;
 
+function createEngMostTable(arrEngMost) {
+    var tableMost = document.getElementById("mostEngaged");
+    var table2 = "";
+    for (var r = 0; r < arrEngMost.length; r++) {
+
+        table2 +=
+            "<tr>" +
+            "<td>" +
+            arrEngMost[r].name +
+            "</td>" +
+            "<td>" +
+            arrEngMost[r].missedVotes +
+            "</td>" +
+            "<td>" +
+            arrEngMost[r].missedVotesPercentage +
+            "</td>" +
+            "</tr>";
+    }
+
+
+    tableMost.innerHTML = table2;
+
+}
 
 // ↓ this is the second table on the loyalty pages ↓
 
@@ -228,7 +231,9 @@ function createLoyTable() {
     // ↓ this seems to be the easiest and shortest way  to do that ↓
     // list.sort((a, b) => (a.color > b.color) ? 1 : -1)
 }
-createLoyTable();
+if (document.title == "Senate Party Loyalty" || document.title == "House Party Loyalty") {
+    createLoyTable();
+}
 
 // ↓ and here we have the least engaged 10% ↓
 
@@ -241,23 +246,29 @@ for (var r = 0; r < arrLoy.length; r++) {
 
 // ↓ this creates the actual table ↓
 
-for (var r = 0; r < arrLoyLeast.length; r++) {
+function createLoyLeastTable() {
 
-    var leastTable = document.getElementById("leastLoyal")
-    table5 +=
-        "<tr>" +
-        "<td>" +
-        arrLoyLeast[r].name +
-        "</td>" +
-        "<td>" +
-        arrLoyLeast[r].totalPartyVotes +
-        "</td>" +
-        "<td>" +
-        arrLoyLeast[r].partyVotesPercentage +
-        "</td>" +
-        "</tr>";
+    for (var r = 0; r < arrLoyLeast.length; r++) {
+
+        var leastTable = document.getElementById("leastLoyal")
+        table5 +=
+            "<tr>" +
+            "<td>" +
+            arrLoyLeast[r].name +
+            "</td>" +
+            "<td>" +
+            arrLoyLeast[r].totalPartyVotes +
+            "</td>" +
+            "<td>" +
+            arrLoyLeast[r].partyVotesPercentage +
+            "</td>" +
+            "</tr>";
+    }
+    if (document.title == "Senate Party Loyalty" || document.title == "House Party Loyalty") {
+        createLoyLeastTable();
+    }
+    leastTable.innerHTML = table5;
 }
-leastTable.innerHTML = table5;
 
 // ↓ this is the third table on the Loyality page ↓
 arrLoy.sort((a, b) => (a.partyVotesPercentage > b.partyVotesPercentage ? 1 : -1));
@@ -275,25 +286,27 @@ for (var r = 0; r < arrLoy.length; r++) {
         arrLoyMost.push(arrLoy[r]);
     }
 };
-console.log(arrLoyMost.length)
 
-for (var r = 0; r < arrLoyMost.length; r++) {
-    var tableMost = document.getElementById("mostLoyal");
 
-    table4 +=
-        "<tr>" +
-        "<td>" +
-        arrLoyMost[r].name +
-        "</td>" +
-        "<td>" +
-        arrLoyMost[r].totalPartyVotes +
-        "</td>" +
-        "<td>" +
-        arrLoyMost[r].partyVotesPercentage +
-        "</td>" +
-        "</tr>";
+function createLoyMostTable() {
+    for (var r = 0; r < arrLoyMost.length; r++) {
+        var tableMost = document.getElementById("mostLoyal");
+        table4 +=
+            "<tr>" +
+            "<td>" +
+            arrLoyMost[r].name +
+            "</td>" +
+            "<td>" +
+            arrLoyMost[r].totalPartyVotes +
+            "</td>" +
+            "<td>" +
+            arrLoyMost[r].partyVotesPercentage +
+            "</td>" +
+            "</tr>";
+    }
+
+    if (document.title == "Senate Party Loyalty" || document.title == "House Party Loyalty") {
+        createLoyMostTable();
+    }
+    tableMost.innerHTML = table4
 }
-console.log(table4)
-
-// console.log(tbody);
-tableMost.innerHTML = table4;
