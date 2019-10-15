@@ -1,6 +1,6 @@
 var members = data.results[0].members;
 
-// ↓ creating the glance table for senate-attendance and house-attendance ↓
+// ↓ creating the glance table ↓
 
 var tbody = document.getElementById("tbody1")
 
@@ -24,15 +24,12 @@ function createGlanceTable() {
                 statistics.democratsVotedWithParty +=
                     members[r].votes_with_party_pct;
             }
-            // console.log(statistics.democratsVotedWithParty)
-
         } else if (members[r].party === "R") {
             statistics.numberOfRepublicans++;
             if (typeof members[r].votes_with_party_pct !== "undefined") {
                 statistics.republicansVotedWithParty +=
                     members[r].votes_with_party_pct;
             }
-
         } else if (members[r].party === "I") {
             statistics.numberOfIndependents++;
             if (typeof members[r].votes_with_party_pct !== "undefined") {
@@ -64,7 +61,7 @@ tbody.innerHTML +=
     statistics.numberOfRepublicans +
     "</td>" +
     "<td>" +
-    statistics.republicansVotedWithParty +
+    statistics.republicansVotedWithParty + " %" +
     "</td>" +
     "</tr>" +
     "<tr>" +
@@ -75,7 +72,7 @@ tbody.innerHTML +=
     statistics.numberOfDemocrats +
     "</td>" +
     "<td>" +
-    statistics.democratsVotedWithParty +
+    statistics.democratsVotedWithParty + " %" +
     "</td>" +
     "</tr>" +
     "<tr>" +
@@ -86,7 +83,7 @@ tbody.innerHTML +=
     statistics.numberOfIndependents +
     "</td>" +
     "<td>" +
-    statistics.independentsVotedWithParty +
+    statistics.independentsVotedWithParty + " %" +
     "</td>" +
     "</tr>" +
     "<tr>" +
@@ -97,45 +94,56 @@ tbody.innerHTML +=
     statistics.total +
     "</td>" +
     "<td>" +
-    statistics.totalVotedWithParty +
+    statistics.totalVotedWithParty + " %" +
     "</td>" +
     "</tr>";
 
-// ↓ this is the second table on the senate-attendance page ↓
+// this would be the approach to create the tables in nodejs, so without strings
 
-var members = data.results[0].members;
+// var rows2 = document.createElement("tr")
+// var cell1 = document.createElement("td")
+
+// cell1.innerHTML = firstName;
+// console.log(cell1)
+// rows2.appendChild(cell1)
+// console.log(rows2)
+// tbody.appendChild(rows2)
+
+// ↓ this is the second table on the attendance pages ↓
+
 var table3 = "";
 
 const arrEng = [];
 
-for (r = 0; r < members.length; r++) {
-    if (members[r].missed_votes != null && members[r].votes_with_party_pct !== "undefined") {
-        arrEng.push({
-            missedVotes: members[r].missed_votes,
-            name: (members[r].first_name + " ") +
-                (members[r].middle_name || "") +
-                (" " + members[r].last_name),
-            missedVotesPercentage: members[r].missed_votes_pct
-
-        })
-    }
-};
-
-
-// ↓ this sorts arrEng into ascending order 
-arrEng.sort((a, b) => (a.missedVotesPercentage < b.missedVotesPercentage ? 1 : -1));
-
-// ↓ this seems to be the easiest and shortest way  to do that ↓
-// list.sort((a, b) => (a.color > b.color) ? 1 : -1)
+function createAttendTable() {
+    for (r = 0; r < members.length; r++) {
+        if (members[r].missed_votes != null && members[r].votes_with_party_pct !== "undefined") {
+            arrEng.push({
+                missedVotes: members[r].missed_votes,
+                name: (members[r].first_name + " ") +
+                    (members[r].middle_name || "") +
+                    (" " + members[r].last_name),
+                missedVotesPercentage: members[r].missed_votes_pct
+            })
+        }
+    };
+    // ↓ this sorts arrEng into ascending order 
+    arrEng.sort((a, b) => (a.missedVotesPercentage < b.missedVotesPercentage ? 1 : -1));
+    // ↓ this seems to be the easiest and shortest way  to do that ↓
+    // list.sort((a, b) => (a.color > b.color) ? 1 : -1)
+}
+createAttendTable();
 
 // ↓ and here we have the least engaged 10% ↓
 
-var arrEngLeast = [];
+var arrEngLeast = []
 for (var r = 0; r < arrEng.length; r++) {
     if (arrEngLeast.length < (arrEng.length * 0.1)) {
         arrEngLeast.push(arrEng[r]);
     }
 };
+
+// ↓ this creates the actual table ↓
 
 for (var r = 0; r < arrEngLeast.length; r++) {
 
@@ -153,21 +161,7 @@ for (var r = 0; r < arrEngLeast.length; r++) {
         "</td>" +
         "</tr>";
 }
-
-// console.log(table3);
-// console.log(tbody);
 leastTable.innerHTML = table3;
-
-// this would be the approach to create the tables in nodejs, so without strings
-
-// var rows2 = document.createElement("tr")
-// var cell1 = document.createElement("td")
-
-// cell1.innerHTML = firstName;
-// console.log(cell1)
-// rows2.appendChild(cell1)
-// console.log(rows2)
-// tbody.appendChild(rows2)
 
 // ↓ this is the third table on the senate-attendance page ↓
 arrEng.sort((a, b) => (a.missedVotesPercentage > b.missedVotesPercentage ? 1 : -1));
@@ -185,8 +179,8 @@ for (var r = 0; r < arrEng.length; r++) {
         arrEngMost.push(arrEng[r]);
     }
 };
-
 console.log(arrEngMost.length)
+
 for (var r = 0; r < arrEngMost.length; r++) {
     var tableMost = document.getElementById("mostEngaged");
 
@@ -194,7 +188,6 @@ for (var r = 0; r < arrEngMost.length; r++) {
         "<tr>" +
         "<td>" +
         arrEngMost[r].name +
-
         "</td>" +
         "<td>" +
         arrEngMost[r].missedVotes +
@@ -203,38 +196,104 @@ for (var r = 0; r < arrEngMost.length; r++) {
         arrEngMost[r].missedVotesPercentage +
         "</td>" +
         "</tr>";
-
 }
 console.log(table2)
 
 // console.log(tbody);
 tableMost.innerHTML = table2;
 
-// ↓ this was my attempt to sort out the 10% ↓
 
-// var highestTen = [];
+// ↓ this is the second table on the loyalty pages ↓
 
-// function highestTenPercent(a, b) {
+var table5 = "";
 
-//     for (var r = 0; r < arrEng.length; r++) {
-//         if (highestTen < (arrEng.length * 0.1)) {
-//             highestTen.push(Math.max(arrEng.missed_votes_pct))
-//         }
-//     }
-//     highestTenPercent(highestTen)
-// };
-// console.log(highestTen);
+const arrLoy = [];
 
-// console.log(highestTen.push(Math.max(arrEng.missed_votes_pct)));
+function createLoyTable() {
+    for (r = 0; r < members.length; r++) {
+        if (members[r].total_votes != null && members[r].votes_with_party_pct !== "undefined") {
+            arrLoy.push({
+                totalPartyVotes: ((members[r].total_votes - members[r].missed_votes) / 100) * members[r].votes_with_party_pct,
+                name: (members[r].first_name + " ") +
+                    (members[r].middle_name || "") +
+                    (" " + members[r].last_name),
+                partyVotesPercentage: members[r].votes_with_party_pct
+            })
+        }
+    };
+    // console.log(arrLoy);
 
-// 216 this is where i want to push the results of the function
+    // ↓ this sorts arrLoy into ascending order 
+    arrLoy.sort((a, b) => (a.partyVotesPercentage < b.partyVotesPercentage ? 1 : -1));
+    // ↓ this seems to be the easiest and shortest way  to do that ↓
+    // list.sort((a, b) => (a.color > b.color) ? 1 : -1)
+}
+createLoyTable();
 
-// 218 the function which i guess cannot work with just a and b
-// 220 loop through arrEng.length
-// 221 as long as highestTen is smaller than 10& of arrEng.length
-// 222 push result of loop (the max number than was found) into var highestTen
-// 225 call function
-// 227 console.log it to check
+// ↓ and here we have the least engaged 10% ↓
 
+var arrLoyLeast = [];
+for (var r = 0; r < arrLoy.length; r++) {
+    if (arrLoyLeast.length < (arrLoy.length * 0.1)) {
+        arrLoyLeast.push(arrLoy[r]);
+    }
+};
 
-// var tbody = document.getElementById("mostLoyal")
+// ↓ this creates the actual table ↓
+
+for (var r = 0; r < arrLoyLeast.length; r++) {
+
+    var leastTable = document.getElementById("leastLoyal")
+    table5 +=
+        "<tr>" +
+        "<td>" +
+        arrLoyLeast[r].name +
+        "</td>" +
+        "<td>" +
+        arrLoyLeast[r].totalPartyVotes +
+        "</td>" +
+        "<td>" +
+        arrLoyLeast[r].partyVotesPercentage +
+        "</td>" +
+        "</tr>";
+}
+leastTable.innerHTML = table5;
+
+// ↓ this is the third table on the Loyality page ↓
+arrLoy.sort((a, b) => (a.partyVotesPercentage > b.partyVotesPercentage ? 1 : -1));
+
+var members = data.results[0].members;
+var table4 = "";
+var rows = members.length;
+var arrLoyMost = []
+
+// ↓ and here we have the most engaged 10 % ↓
+
+var arrLoyMost = [];
+for (var r = 0; r < arrLoy.length; r++) {
+    if (arrLoyMost.length < (arrLoy.length * 0.1)) {
+        arrLoyMost.push(arrLoy[r]);
+    }
+};
+console.log(arrLoyMost.length)
+
+for (var r = 0; r < arrLoyMost.length; r++) {
+    var tableMost = document.getElementById("mostLoyal");
+
+    table4 +=
+        "<tr>" +
+        "<td>" +
+        arrLoyMost[r].name +
+        "</td>" +
+        "<td>" +
+        arrLoyMost[r].totalPartyVotes +
+        "</td>" +
+        "<td>" +
+        arrLoyMost[r].partyVotesPercentage +
+        "</td>" +
+        "</tr>";
+}
+console.log(table4)
+
+// console.log(tbody);
+tableMost.innerHTML = table4;
