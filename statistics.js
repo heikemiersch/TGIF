@@ -153,10 +153,8 @@ function createAttendanceList() {
             arrEngMost.push(arrEng[r]);
         }
     };
-
     createEngMostTable(arrEngMost);
 }
-
 
 // ↓ this creates the actual table ↓
 
@@ -177,7 +175,6 @@ function createEngLeastTable(arr) {
             "</tr>";
     }
     leastTable.innerHTML = table3;
-
 }
 
 // var rows = members.length;
@@ -200,19 +197,20 @@ function createEngMostTable(arrEngMost) {
             "</td>" +
             "</tr>";
     }
-
-
     tableMost.innerHTML = table2;
-
 }
 
-// ↓ this is the second table on the loyalty pages ↓
+// ↓ these are the tables on the loyalty pages ↓
 
 var table5 = "";
 
 const arrLoy = [];
 
-function createLoyTable() {
+if (document.title == "Senate Party Loyalty" || document.title == "House Party Loyalty") {
+    createLoyList();
+}
+
+function createLoyList() {
     for (r = 0; r < members.length; r++) {
         if (members[r].total_votes != null && members[r].votes_with_party_pct !== "undefined") {
             arrLoy.push({
@@ -224,73 +222,73 @@ function createLoyTable() {
             })
         }
     };
-    // console.log(arrLoy);
-
+    // statistics.totalPartyVotes = (Math.floor(statistics.totalPartyVotes * 10000) / 10000);
     // ↓ this sorts arrLoy into ascending order 
     arrLoy.sort((a, b) => (a.partyVotesPercentage < b.partyVotesPercentage ? 1 : -1));
     // ↓ this seems to be the easiest and shortest way  to do that ↓
     // list.sort((a, b) => (a.color > b.color) ? 1 : -1)
+    var arrLoyLeast = [];
+    for (var r = 0; r < arrLoy.length; r++) {
+        if (arrLoyLeast.length < (arrLoy.length * 0.1)) {
+            arrLoyLeast.push(arrLoy[r]);
+        }
+    };
+    createLoyLeastTable(arrLoyLeast);
+
+
+    arrLoy.sort((a, b) => (a.partyVotesPercentage > b.partyVotesPercentage ? 1 : -1));
+
+
+    var arrLoyMost = [];
+    for (var r = 0; r < arrEng.length; r++) {
+        if (arrLoyMost.length < (arrLoy.length * 0.1)) {
+            arrLoyMost.push(arrLoy[r]);
+        }
+    };
+    createLoyMostTable(arrLoyMost);
 }
-if (document.title == "Senate Party Loyalty" || document.title == "House Party Loyalty") {
-    createLoyTable();
-}
 
-// ↓ and here we have the least engaged 10% ↓
-
-var arrLoyLeast = [];
-for (var r = 0; r < arrLoy.length; r++) {
-    if (arrLoyLeast.length < (arrLoy.length * 0.1)) {
-        arrLoyLeast.push(arrLoy[r]);
-    }
-};
-
-// ↓ this creates the actual table ↓
-
-function createLoyLeastTable() {
-
-    for (var r = 0; r < arrLoyLeast.length; r++) {
-
-        var leastTable = document.getElementById("leastLoyal")
+function createLoyLeastTable(arr) {
+    var leastTable = document.getElementById("leastLoyal")
+    for (var r = 0; r < arr.length; r++) {
         table5 +=
             "<tr>" +
             "<td>" +
-            arrLoyLeast[r].name +
+            arr[r].name +
             "</td>" +
             "<td>" +
-            arrLoyLeast[r].totalPartyVotes +
+            arr[r].totalPartyVotes +
             "</td>" +
             "<td>" +
-            arrLoyLeast[r].partyVotesPercentage +
+            arr[r].partyVotesPercentage +
             "</td>" +
             "</tr>";
-    }
-    if (document.title == "Senate Party Loyalty" || document.title == "House Party Loyalty") {
-        createLoyLeastTable();
     }
     leastTable.innerHTML = table5;
 }
 
 // ↓ this is the third table on the Loyality page ↓
-arrLoy.sort((a, b) => (a.partyVotesPercentage > b.partyVotesPercentage ? 1 : -1));
+// arrLoy.sort((a, b) => (a.partyVotesPercentage > b.partyVotesPercentage ? 1 : -1));
 
-var members = data.results[0].members;
-var table4 = "";
-var rows = members.length;
-var arrLoyMost = []
+// var members = data.results[0].members;
+// var table4 = "";
+// var rows = members.length;
+// var arrLoyMost = []
 
-// ↓ and here we have the most engaged 10 % ↓
+// // ↓ and here we have the most engaged 10 % ↓
 
-var arrLoyMost = [];
-for (var r = 0; r < arrLoy.length; r++) {
-    if (arrLoyMost.length < (arrLoy.length * 0.1)) {
-        arrLoyMost.push(arrLoy[r]);
-    }
-};
+// var arrLoyMost = [];
+// for (var r = 0; r < arrLoy.length; r++) {
+//     if (arrLoyMost.length < (arrLoy.length * 0.1)) {
+//         arrLoyMost.push(arrLoy[r]);
+//     }
+// };
 
-
-function createLoyMostTable() {
+function createLoyMostTable(arrLoyMost) {
+    var tableMost = document.getElementById("mostLoyal");
+    var table4 = "";
     for (var r = 0; r < arrLoyMost.length; r++) {
-        var tableMost = document.getElementById("mostLoyal");
+
         table4 +=
             "<tr>" +
             "<td>" +
@@ -304,9 +302,5 @@ function createLoyMostTable() {
             "</td>" +
             "</tr>";
     }
-
-    if (document.title == "Senate Party Loyalty" || document.title == "House Party Loyalty") {
-        createLoyMostTable();
-    }
-    tableMost.innerHTML = table4
+    tableMost.innerHTML = table4;
 }
