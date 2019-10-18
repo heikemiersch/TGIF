@@ -238,12 +238,11 @@ if (
 function createLoyList() {
   for (r = 0; r < members.length; r++) {
     if (
-      members[r].total_votes != null &&
+      members[r].total_votes != null ||
       members[r].votes_with_party_pct !== "undefined"
     ) {
       arrLoy.push({
-        totalPartyVotes: ((members[r].total_votes - members[r].missed_votes) / 100) *
-          members[r].votes_with_party_pct,
+        numberPartyVotes: Math.round((members[r].votes_with_party_pct) / 100) * members[r].total_votes,
         name: members[r].first_name +
           " " +
           (members[r].middle_name || "") +
@@ -258,7 +257,7 @@ function createLoyList() {
   // ↓ this seems to be the easiest and shortest way  to do that ↓
   // list.sort((a, b) => (a.color > b.color) ? 1 : -1)
 
-  // statistics.totalPartyVotes = (Math.floor(statistics.totalPartyVotes * 100) / 100);
+  // statistics.numberPartyVotes = (Math.floor(statistics.numberPartyVotes * 100) / 100);
 
   var arrLoyLeast = [];
   for (var r = 0; r < arrLoy.length; r++) {
@@ -273,7 +272,7 @@ function createLoyList() {
   );
 
   var arrLoyMost = [];
-  for (var r = 0; r < arrEng.length; r++) {
+  for (var r = 0; r < arrLoy.length; r++) {
     if (arrLoyMost.length < arrLoy.length * 0.1) {
       arrLoyMost.push(arrLoy[r]);
     }
@@ -290,10 +289,10 @@ function createLoyLeastTable(arr) {
       arr[r].name +
       "</td>" +
       "<td>" +
-      arr[r].totalPartyVotes +
+      arr[r].numberPartyVotes +
       "</td>" +
       "<td>" +
-      arr[r].partyVotesPercentage +
+      arr[r].partyVotesPercentage + "%" +
       "</td>" +
       "</tr>";
   }
@@ -310,10 +309,10 @@ function createLoyMostTable(arrLoyMost) {
       arrLoyMost[r].name +
       "</td>" +
       "<td>" +
-      arrLoyMost[r].totalPartyVotes +
+      arrLoyMost[r].numberPartyVotes +
       "</td>" +
       "<td>" +
-      arrLoyMost[r].partyVotesPercentage +
+      arrLoyMost[r].partyVotesPercentage + "%" +
       "</td>" +
       "</tr>";
   }
