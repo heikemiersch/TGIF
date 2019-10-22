@@ -3,7 +3,7 @@ var members = data.results[0].members;
 function createTable() {
     var checkboxes = getCheckboxValue()
     var dropdowns = getDropdownValue()
-    console.log(dropdowns)
+    // console.log(dropdowns)
 
     var tbody = document.getElementById("tbody")
     var table = "";
