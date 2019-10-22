@@ -1,24 +1,46 @@
-// Get checked box values and put them into an array.
-// Use that array to filter the list of members to pass to your
-// function to create the table.
-// Call this code whenever a checkbox is changed, i.e., use an onchanged event listener.
+var members = data.results[0].members;
 
-document.getElementById("click").addEventListener("click", createChbox);
+////////// checkboxes party /////////////
 
-// element.addEventListener("click", createChbox);
+function getCheckboxValue() {
+  var chbox = document.getElementsByClassName("chbox");
 
-function createChbox() {
-    var arrRep = [];
-    var arrDem = [];
-    var arrInd = [];
-    for (var r = 0; r > members[r].length; r++) {
-        if (members[r].party === D) {
-            arrDem.push;
-        } else if (members[r].party === R) {
-            arrRep.push;
-        } else if (members[r].party === I) {
-            arrInd.push;
-        }
+  var arrCheckedBox = [];
+  for (var r = 0; r < chbox.length; r++) {
+    if (chbox[r].checked == true) {
+      arrCheckedBox.push(chbox[r].value);
     }
-};
-createChbox();
+  }
+  return arrCheckedBox
+}
+
+////////// filter by state /////////////
+
+function createDropdown() {
+  var filter = document.getElementById("dropdown-state")
+  var arrState = [];
+
+  for (var r = 0; r < members.length; r++) {
+    if (!arrState.includes(members[r].state)) {
+      arrState.push(members[r].state);
+      arrState.sort();
+    }
+  }
+  for (var r = 0; r < arrState.length; r++) {
+    var optionItem = document.createElement("option")
+    optionItem.innerHTML = arrState[r];
+    filter.appendChild(optionItem);
+  }
+
+  // // dropdownData = arrState.push(members[r].state);
+  // dropdownData.innerHTML = arrState;
+  console.log(arrState);
+}
+createDropdown();
+
+
+function getDropdownValue() {
+  var dropdown = document.getElementById("dropdown-state").value;
+  return dropdown
+
+}

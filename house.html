@@ -72,12 +72,24 @@
         <p>Each U.S. state is represented in the House in proportion to its population as measured in the census, but
             every state is entitled to at least one representative. </p>
 
-        <div class="checkboxes" id="click">
-            <h6>Filter by Party Affiliation</h6>
+        <div class="checkboxes">
 
-            <input type="checkbox" value="R" id="republican" checked="true">Republican
-            <input type="checkbox" value="D" id="democrat" checked="true">Democrat
-            <input type="checkbox" value="I" id="independent" checked="true">Independent
+            <h6>Filter by Party</h6>
+
+            <section id="filter-by-party" onchange="createTable()">
+                <input type="checkbox" value="R" class="chbox" name="republican" checked><label>Republican</label>
+                <input type="checkbox" value="D" class="chbox" name="democrat" checked><label>Democrat</label>
+                <input type="checkbox" value="I" class="chbox" name="independent" checked><label>Independent</label>
+            </section>
+
+            <section id="filter-by-state">
+                <h5>
+                    <h6>Filter by State</h6>
+                    <select id="dropdown-state" onchange="createTable()">
+                        <option value="ALL">ALL STATES</option>
+                    </select>
+                </h5>
+            </section>
         </div>
 
         <table id="house-data" class="table table-hover">
@@ -103,8 +115,8 @@
     </footer>
 
     <script src="pro-congress-113-house.js"></script>
-    <script src="main.js"></script>
     <script src="bebrave.js"></script>
+    <script src="main.js"></script>
     <script src="http://code.jquery.com/jquery-1.12.4.min.js"
         integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
