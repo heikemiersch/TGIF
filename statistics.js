@@ -1,6 +1,6 @@
 var members = data.results[0].members;
 
-// ↓ creating the glance table ↓
+//////// ↓ creating the glance table ↓ ////////
 
 var tbody = document.getElementById("tbody1");
 
@@ -49,6 +49,8 @@ function createStatisticGlanceTable() {
   statistics.independentsVotedWithParty =
     statistics.independentsVotedWithParty / statistics.numberOfIndependents;
   statistics.total = members.length;
+
+  //////// ↓ having just two decimals ↓ ////////
 
   statistics.democratsVotedWithParty =
     Math.floor(statistics.democratsVotedWithParty * 100) / 100;
@@ -111,7 +113,7 @@ tbody.innerHTML +=
   "</td>" +
   "</tr>";
 
-// this would be the approach to create the tables in nodejs, so without strings
+//////// ↓ this would be the approach to create the tables in nodejs, so without strings ↓ ////////
 
 // var rows2 = document.createElement("tr")
 // var cell1 = document.createElement("td")
@@ -122,7 +124,8 @@ tbody.innerHTML +=
 // console.log(rows2)
 // tbody.appendChild(rows2)
 
-// ↓ this is the second table on the attendance pages ↓
+
+//////// ↓ creating the second table on the attendance page ↓ ////////
 
 var table3 = "";
 const arrEng = [];
@@ -150,12 +153,16 @@ function createAttendanceList() {
       });
     }
   }
-  // ↓ this sorts arrEng into ascending order
+
+  //////// ↓ sorting arrEng into ascending order ↓ ////////
+
   arrEng.sort((a, b) =>
     a.missedVotesPercentage < b.missedVotesPercentage ? 1 : -1
   );
-  // ↓ this seems to be the easiest and shortest way  to do that ↓
+
+  // ↓ btw this seems to be the easiest and shortest way  to do that ↓ //
   // list.sort((a, b) => (a.color > b.color) ? 1 : -1)
+
   var arrEngLeast = [];
   for (var r = 0; r < arrEng.length; r++) {
     if (arrEngLeast.length < arrEng.length * 0.1) {
@@ -164,12 +171,13 @@ function createAttendanceList() {
   }
   createEngLeastTable(arrEngLeast);
 
-  // ↓ this is the third table on the senate-attendance page ↓
+  //////// ↓ creating the third table on the attendance page ↓ ////////
+
   arrEng.sort((a, b) =>
     a.missedVotesPercentage > b.missedVotesPercentage ? 1 : -1
   );
 
-  // ↓ and here we have the most engaged 10 % ↓
+  //////// ↓ most engaged 10 percent ↓ ////////
   var arrEngMost = [];
   for (var r = 0; r < arrEng.length; r++) {
     if (arrEngMost.length < arrEng.length * 0.1) {
@@ -179,7 +187,7 @@ function createAttendanceList() {
   createEngMostTable(arrEngMost);
 }
 
-// ↓ this creates the actual table ↓
+//////// ↓ this creates the actual table ↓ ////////
 
 function createEngLeastTable(arr) {
   var leastTable = document.getElementById("leastEngaged");
@@ -199,8 +207,6 @@ function createEngLeastTable(arr) {
   }
   leastTable.innerHTML = table3;
 }
-
-// var rows = members.length;
 
 function createEngMostTable(arrEngMost) {
   var tableMost = document.getElementById("mostEngaged");
@@ -222,7 +228,7 @@ function createEngMostTable(arrEngMost) {
   tableMost.innerHTML = table2;
 }
 
-// ↓ these are the tables on the loyalty pages ↓
+//////// ↓ creating the tables on the loyalty pages ↓ ////////
 
 var table5 = "";
 
@@ -251,13 +257,17 @@ function createLoyList() {
       });
     }
   }
-  // ↓ this sorts arrLoy into ascending order
+
+  //////// ↓ sorting arrLoy into ascending order ↓ ////////
+
   arrLoy.sort((a, b) =>
     a.partyVotesPercentage < b.partyVotesPercentage ? 1 : -1);
-  // ↓ this seems to be the easiest and shortest way  to do that ↓
+
+
+  // ↓ again this seems to be the easiest and shortest way  to do that ↓ //
   // list.sort((a, b) => (a.color > b.color) ? 1 : -1)
 
-  // statistics.numberPartyVotes = (Math.floor(statistics.numberPartyVotes * 100) / 100);
+  //////// ↓ least loyal ten percent ↓ ////////
 
   var arrLoyLeast = [];
   for (var r = 0; r < arrLoy.length; r++) {
@@ -270,6 +280,8 @@ function createLoyList() {
   arrLoy.sort((a, b) =>
     a.partyVotesPercentage > b.partyVotesPercentage ? 1 : -1
   );
+
+  //////// ↓ most loyal ten percent ↓ ////////
 
   var arrLoyMost = [];
   for (var r = 0; r < arrLoy.length; r++) {

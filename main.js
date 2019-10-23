@@ -45,6 +45,8 @@ function createTable() {
 }
 createTable()
 
+//////// ↓ this would be the approach to create the tables in nodejs, so without strings ↓ ////////
+
 // var rows2 = document.createElement("tr")
 // var cell1 = document.createElement("td")
 
@@ -53,3 +55,45 @@ createTable()
 // rows2.appendChild(cell1)
 // console.log(rows2)
 // tbody.appendChild(rows2)
+
+
+//////// ↓ checkboxes party ↓ ////////
+
+function getCheckboxValue() {
+    var chbox = document.getElementsByClassName("chbox");
+
+    var arrCheckedBox = [];
+    for (var r = 0; r < chbox.length; r++) {
+        if (chbox[r].checked == true) {
+            arrCheckedBox.push(chbox[r].value);
+        }
+    }
+    return arrCheckedBox
+}
+
+//////// ↓ filter by state ↓ ////////
+
+function createDropdown() {
+    var filter = document.getElementById("dropdown-state")
+    var arrState = [];
+
+    for (var r = 0; r < members.length; r++) {
+        if (!arrState.includes(members[r].state)) {
+            arrState.push(members[r].state);
+            arrState.sort();
+        }
+    }
+    for (var r = 0; r < arrState.length; r++) {
+        var optionItem = document.createElement("option")
+        optionItem.innerHTML = arrState[r];
+        filter.appendChild(optionItem);
+    }
+
+    console.log(arrState);
+}
+createDropdown();
+
+function getDropdownValue() {
+    var dropdown = document.getElementById("dropdown-state").value;
+    return dropdown
+}
