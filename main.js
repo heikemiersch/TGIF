@@ -1,23 +1,77 @@
-var members = data.results[0].members;
+var askFor = "";
 
-function createTable() {
+if (document.title.includes("Senate")) {
+    askFor = "senate"
+} else if (document.title.includes("House")) {
+    askFor = "house"
+};
+
+fetch(`https://api.propublica.org/congress/v1/113/${askFor}/members.json`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "X-API-Key": "thiscontainsapikey"
+        }
+    })
+    .then(function (response) {
+
+        return response.json();
+    })
+    .then(function (data) {
+
+        var members = data.results[0].members;
+
+        if (
+            document.title == "Senate" ||
+            document.title == "House"
+        ) {
+            createTable(members);
+            createEvent(members);
+            createDropdown(members);
+
+            createEventForDropdown(members)
+        };
+        if (
+            document.title == "Senate Attendance" ||
+            document.title == "House Attendance"
+        ) {
+            createStatisticGlanceTable(members);
+            createAttendanceList(members);
+        }
+        if (
+            document.title == "Senate Party Loyalty" ||
+            document.title == "House Party Loyalty"
+        ) {
+            createStatisticGlanceTable(members);
+            createLoyList(members);
+        }
+    });
+
+function createEvent(members) {
+    var chbox = Array.from(document.getElementsByClassName("chbox"));
+
+    chbox.forEach(function (oneCheckbox) {
+        oneCheckbox.addEventListener("change", function () {
+            createTable(members)
+        })
+    })
+}
+
+function createTable(members) {
     var checkboxes = getCheckboxValue()
     var dropdowns = getDropdownValue()
-    // console.log(dropdowns)
 
     var tbody = document.getElementById("tbody")
     var table = "";
     var rows = members.length;
-    var cols = 5;
 
     for (var r = 0; r < rows; r++) {
-        if (checkboxes.includes(members[r].party))
+        if (checkboxes.includes(members[r].party)) {
             if (dropdowns == members[r].state || dropdowns == "ALL") {
                 var name =
                     (members[r].first_name + " ") +
                     (members[r].middle_name || "") +
                     (" " + members[r].last_name);
-
                 table +=
                     "<tr>" +
                     "<td>" +
@@ -37,13 +91,10 @@ function createTable() {
                     "</td>"
                 "</tr>";
             }
-
+        }
     }
-
     tbody.innerHTML = table;
-    console.log(tbody);
 }
-createTable()
 
 //////// ↓ this would be the approach to create the tables in nodejs, so without strings ↓ ////////
 
@@ -73,7 +124,15 @@ function getCheckboxValue() {
 
 //////// ↓ filter by state ↓ ////////
 
-function createDropdown() {
+function createEventForDropdown(members) {
+    var filter = document.getElementById("dropdown-state")
+    console.log(filter)
+    filter.addEventListener("change", function () {
+        createTable(members)
+    })
+}
+
+function createDropdown(members) {
     var filter = document.getElementById("dropdown-state")
     var arrState = [];
 
@@ -88,10 +147,8 @@ function createDropdown() {
         optionItem.innerHTML = arrState[r];
         filter.appendChild(optionItem);
     }
-
     console.log(arrState);
 }
-createDropdown();
 
 function getDropdownValue() {
     var dropdown = document.getElementById("dropdown-state").value;

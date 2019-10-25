@@ -68,9 +68,6 @@
                     </div>
                 </li>
             </ul>
-            <p>
-                Please email us at <a href="info@tgif.net">info@tgf.net</a>
-            </p>
         </div>
     </nav>
 
@@ -88,8 +85,7 @@
 
         <div class="checkboxes">
             <h6>Filter by Party</h6>
-            <section id="filter-by-party" onchange="createTable()">
-
+            <section id="filter-by-party">
                 <input type="checkbox" value="R" class="chbox" name="republican" checked><label>Republican</label>
                 <input type="checkbox" value="D" class="chbox" name="democrat" checked><label>Democrat</label>
                 <input type="checkbox" value="I" class="chbox" name="independent" checked><label>Independent</label>
@@ -98,13 +94,13 @@
             <section id="filter-by-state">
                 <h5>
                     <h6>Filter by State</h6>
-                    <select id="dropdown-state" onchange="createTable()">
+                    <select id="dropdown-state">
                         <option value="ALL">ALL STATES</option>
                     </select>
                 </h5>
             </section>
 
-            <table id="senate-data" class="table table-hover" onclick="getFilter()">
+            <table id="senate-data" class="table table-hover">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -126,12 +122,14 @@
             </div>
         </footer>
 
-        <script src="pro-Congress-113-senate.js"></script>
-        <script src="main.js"></script>
+        <!-- <script src="pro-Congress-113-senate.js"></script> -->
         <script src="http://code.jquery.com/jquery-1.12.4.min.js"
             integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+        </script>
+        <script src="main.js"></script>
+        <!-- <script src="live-data.js"></script> -->
         </script>
 </body>
 

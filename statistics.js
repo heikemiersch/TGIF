@@ -1,6 +1,4 @@
-var members = data.results[0].members;
-
-//////// ↓ creating the glance table ↓ ////////
+//////// ↓ creating the statistics for the glance table ↓ ////////
 
 var tbody = document.getElementById("tbody1");
 
@@ -16,7 +14,7 @@ var statistics = {
   totalVotedWithParty: 0
 };
 
-function createStatisticGlanceTable() {
+function createStatisticGlanceTable(members) {
   for (var r = 0; r < members.length; r++) {
     if (members[r].party === "D") {
       statistics.numberOfDemocrats++;
@@ -60,60 +58,66 @@ function createStatisticGlanceTable() {
     Math.floor(statistics.independentsVotedWithParty * 100) / 100;
   statistics.totalVotedWithParty =
     Math.floor(statistics.totalVotedWithParty * 100) / 100;
+
+  createGlanceTable();
 }
-createStatisticGlanceTable();
 
-tbody.innerHTML +=
-  "<tr>" +
-  "<td>" +
-  "Republicans" +
-  "</td>" +
-  "<td>" +
-  statistics.numberOfRepublicans +
-  "</td>" +
-  "<td>" +
-  statistics.republicansVotedWithParty +
-  " %" +
-  "</td>" +
-  "</tr>" +
-  "<tr>" +
-  "<td>" +
-  "Democrats" +
-  "</td>" +
-  "<td>" +
-  statistics.numberOfDemocrats +
-  "</td>" +
-  "<td>" +
-  statistics.democratsVotedWithParty +
-  " %" +
-  "</td>" +
-  "</tr>" +
-  "<tr>" +
-  "<td>" +
-  "Independents" +
-  "</td>" +
-  "<td>" +
-  statistics.numberOfIndependents +
-  "</td>" +
-  "<td>" +
-  statistics.independentsVotedWithParty +
-  " %" +
-  "</td>" +
-  "</tr>" +
-  "<tr>" +
-  "<td>" +
-  "Total" +
-  "</td>" +
-  "<td>" +
-  statistics.total +
-  "</td>" +
-  "<td>" +
-  statistics.totalVotedWithParty +
-  " %" +
-  "</td>" +
-  "</tr>";
 
-//////// ↓ this would be the approach to create the tables in nodejs, so without strings ↓ ////////
+//////// ↓ creating the actual glance table ↓ ////////
+
+function createGlanceTable() {
+  tbody.innerHTML +=
+    "<tr>" +
+    "<td>" +
+    "Republicans" +
+    "</td>" +
+    "<td>" +
+    statistics.numberOfRepublicans +
+    "</td>" +
+    "<td>" +
+    statistics.republicansVotedWithParty +
+    " %" +
+    "</td>" +
+    "</tr>" +
+    "<tr>" +
+    "<td>" +
+    "Democrats" +
+    "</td>" +
+    "<td>" +
+    statistics.numberOfDemocrats +
+    "</td>" +
+    "<td>" +
+    statistics.democratsVotedWithParty +
+    " %" +
+    "</td>" +
+    "</tr>" +
+    "<tr>" +
+    "<td>" +
+    "Independents" +
+    "</td>" +
+    "<td>" +
+    statistics.numberOfIndependents +
+    "</td>" +
+    "<td>" +
+    // statistics.independentsVotedWithParty +
+    // " %" +
+    "</td>" +
+    "</tr>" +
+    "<tr>" +
+    "<td>" +
+    "Total" +
+    "</td>" +
+    "<td>" +
+    statistics.total +
+    "</td>" +
+    "<td>" +
+    statistics.totalVotedWithParty +
+    " %" +
+    "</td>" +
+    "</tr>";
+}
+
+//////// ↓ this would be the approach to create the tables in nodejs, so without strings and stuff ↓ ////////
 
 // var rows2 = document.createElement("tr")
 // var cell1 = document.createElement("td")
@@ -128,16 +132,9 @@ tbody.innerHTML +=
 //////// ↓ creating the second table on the attendance page ↓ ////////
 
 var table3 = "";
-const arrEng = [];
 
-if (
-  document.title == "Senate Attendance" ||
-  document.title == "House Attendance"
-) {
-  createAttendanceList();
-}
-
-function createAttendanceList() {
+function createAttendanceList(members) {
+  const arrEng = [];
   for (r = 0; r < members.length; r++) {
     if (
       members[r].missed_votes != null &&
@@ -234,14 +231,7 @@ var table5 = "";
 
 const arrLoy = [];
 
-if (
-  document.title == "Senate Party Loyalty" ||
-  document.title == "House Party Loyalty"
-) {
-  createLoyList();
-}
-
-function createLoyList() {
+function createLoyList(members) {
   for (r = 0; r < members.length; r++) {
     if (
       members[r].total_votes != null ||
@@ -277,6 +267,7 @@ function createLoyList() {
   }
   createLoyLeastTable(arrLoyLeast);
 
+
   arrLoy.sort((a, b) =>
     a.partyVotesPercentage > b.partyVotesPercentage ? 1 : -1
   );
@@ -291,6 +282,32 @@ function createLoyList() {
   }
   createLoyMostTable(arrLoyMost);
 }
+
+//////// ↓ let's try to create tables with javascript ↓ ////////
+
+// function createLoyTable(arr) {
+//   var table = document.getElementById("loyalTable");
+//   for (var r = 0; r < arr.length; r++) {
+//     var row = document.createElement("tr")
+//     var cell1 = document.createElement("td");
+//     var cell2 = document.createElement("td");
+//     var cell3 = document.createElement("td");
+//     cell1.innerHTML = arr.name;
+//     cell2.innerHTML = arr.numberPartyVotes;
+//     cell3.innerHTML = arr.partyVotesPercentage + "%";
+//     row.appendChild(cell1);
+//     row.appendChild(cell2);
+//     row.appendChild(cell3);
+
+//     table.appendChild(row)
+//   }
+
+// console.log(table);
+// }
+// createLoyTable(arrLoyMost);
+// createLoyTable(arrLoyLeast);
+
+//////// ↓ and back to shitty tables ↓ ////////
 
 function createLoyLeastTable(arr) {
   var leastTable = document.getElementById("leastLoyal");
